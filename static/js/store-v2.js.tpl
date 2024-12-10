@@ -1214,10 +1214,11 @@ DOMContentLoaded.addEventOrExecute(() => {
             $selected_option.prop('selected', true).trigger('change');
             var available_variant = jQueryNuvem(this).closest(".js-quickshop-container").data('variants');
 
-            var available_variant_color = jQueryNuvem(this).closest('.js-color-variant-active').data('option');
+            var available_variant_color = jQueryNuvem(this).closest('.js-color-variant-active').data('option').toLowerCase();
 
             for (var variant in available_variant) {
-                if (option_id == available_variant[variant]['option'+ available_variant_color ]) {
+                if (option_id.toLowerCase() == available_variant[variant]['option' + available_variant_color ].toLowerCase()) {
+
 
                     if (available_variant[variant]['stock'] == null || available_variant[variant]['stock'] > 0 ) {
 
@@ -1669,7 +1670,14 @@ DOMContentLoaded.addEventOrExecute(() => {
                 if(($variants_group).hasClass("js-color-variants-container")){
                     var selected_option_id = jQueryNuvem(this).find("option").filter((el) => el.selected).val();
                     jQueryNuvem('#' + quick_id).find('.js-color-variant').removeClass("selected");
-                    jQueryNuvem('#' + quick_id).find('.js-color-variant[data-option="'+selected_option_id+'"]').addClass("selected");
+                    jQueryNuvem('#' + quick_id)
+                    .find('.js-color-variant')
+                    .removeClass("selected")
+                    .filter(function() {
+                        return jQueryNuvem(this).data('option').toLowerCase() === selected_option_id.toLowerCase();
+                    })
+                    .addClass("selected");
+
                 }
             {% endif %}
         } else {
